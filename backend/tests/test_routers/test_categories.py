@@ -1,6 +1,6 @@
 from fastapi import status
+
 from tests.factory import random_string
-from tests.init_client import client
 
 
 class TestGetAllCategories:
@@ -76,7 +76,7 @@ class TestDeleteCategories:
 
         resp = client.delete(f"/categories/{category_id}")
         assert resp.status_code == status.HTTP_200_OK
-        assert resp.json() == None
+        assert resp.json() is None
 
     def test_delete_category_with_wrong_id(self, client):
         resp = client.delete("/categories/123")
