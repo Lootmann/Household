@@ -1,5 +1,4 @@
 from fastapi import status
-
 from tests.factory import random_string
 from tests.init_client import client
 

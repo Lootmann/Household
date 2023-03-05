@@ -1,11 +1,10 @@
 from typing import List
 
+from api.models.categories import Category as CategoryModel
+from api.schemas import categories as category_schema
 from sqlalchemy import func
 from sqlalchemy.future import select
 from sqlalchemy.orm import Session
-
-from api.models.categories import Category as CategoryModel
-from api.schemas import categories as category_schema
 
 
 def get_all_categoires(db: Session) -> List[CategoryModel]:
