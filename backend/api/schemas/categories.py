@@ -21,6 +21,10 @@ class CategorCreateResponse(CategoryCreate):
     id: int
 
 
+class CategoryUpdate(BaseModel):
+    name: str = Field(...)
+
+
 class Category(CategoryBase):
     id: int
     name: str
