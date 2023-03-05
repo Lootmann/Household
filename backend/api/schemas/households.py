@@ -7,6 +7,7 @@ class HouseholdBase(BaseModel):
     amount: int = Field(...)
     registered_at: date = Field(...)
     memo: str
+    category_id: int = Field(...)
 
     class Config:
         orm_mode = True
@@ -16,6 +17,7 @@ class HouseholdBase(BaseModel):
                 "amount": 1234,
                 "registered_at": date.today(),
                 "memo": "Hungry :^)",
+                "category_id": 1,
             }
         }
 

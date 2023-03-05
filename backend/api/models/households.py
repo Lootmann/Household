@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 
 from api.db import Base
 from sqlalchemy import ForeignKey
@@ -10,7 +10,7 @@ class Household(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     amount: Mapped[int]
-    registered_at: Mapped[datetime]
+    registered_at: Mapped[date]
     memo: Mapped[str]
 
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
