@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 
 from fastapi import status
 
@@ -72,11 +72,17 @@ class TestPatchHousehold:
         assert resp_obj["registered_at"] == str(household.registered_at)
         assert resp_obj["category_id"] == household.category_id
 
-    def test_patch_household_with_some_field(self, client):
-        category = CategoryFactory.create_category(client, name=random_string())
-        household = HouseholdFactory.create_household(client, category_id=category.id)
+    def test_patch_household(self, client):
+        category1 = CategoryFactory.create_category(client, name=random_string())
+        category2 = CategoryFactory.create_category(client, name=random_string())
+        household = HouseholdFactory.create_household(client, category_id=category1.id)
 
-        update_data = {"amount": 99999, "memo": "hello world"}
+        update_data = {
+            "amount": 99999,
+            "memo": "hello world",
+            "registered_at": str(date.today() + timedelta(days=1)),
+            "category_id": category2.id,
+        }
         resp = client.patch(f"/households/{household.id}", json=update_data)
         assert resp.status_code == status.HTTP_200_OK
 
@@ -85,6 +91,10 @@ class TestPatchHousehold:
         assert resp_obj["amount"] == 99999
         assert resp_obj["memo"] != household.memo
         assert resp_obj["memo"] == "hello world"
+
+    def test_patch_household_with_wrong_id(self, client):
+        resp = client.patch("/households/123", json={})
+        assert resp.status_code == status.HTTP_404_NOT_FOUND
 
 
 class TestDeleteHousehold:
