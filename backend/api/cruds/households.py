@@ -1,13 +1,18 @@
 from typing import List
 
+from sqlalchemy.orm import Session
+
 from api.models.households import Household as HouseholdModel
 from api.schemas import households as household_schema
-from sqlalchemy.future import select
-from sqlalchemy.orm import Session
 
 
 def get_all_households(db: Session) -> List[HouseholdModel]:
-    return db.scalars(select(HouseholdModel)).all()
+    # return db.execute(select(HouseholdModel)).scalars().all()
+    return db.query(HouseholdModel).all()
+
+
+def find_by_id(db: Session, household_id: int) -> HouseholdModel | None:
+    return db.get(HouseholdModel, household_id)
 
 
 def create_household(

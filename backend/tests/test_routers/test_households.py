@@ -1,8 +1,8 @@
 from datetime import date
 
 from fastapi import status
+
 from tests.factory import CategoryFactory, HouseholdFactory, random_string
-from tests.init_client import client
 
 
 class TestGetAllHouseholds:
@@ -20,6 +20,19 @@ class TestGetAllHouseholds:
         resp = client.get("/households")
         assert resp.status_code == status.HTTP_200_OK
         assert len(resp.json()) == 10
+
+
+class TestGetHousehold:
+    def test_get_household(self, client):
+        category = CategoryFactory.create_category(client, name=random_string())
+        household = HouseholdFactory.create_household(client, category_id=category.id)
+
+        resp = client.get(f"/households/{household.id}")
+        assert resp.status_code == status.HTTP_200_OK
+
+    def test_get_household_with_wrong_id(self, client):
+        resp = client.get(f"/households/312")
+        assert resp.status_code == status.HTTP_404_NOT_FOUND
 
 
 class TestPostHousehold:
