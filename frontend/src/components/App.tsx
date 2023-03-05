@@ -7,22 +7,14 @@ function App() {
       <Header />
 
       <div className="h-[calc(100vh-4rem)] flex flex-col gap-2 p-4 text-xl">
-        <div className="flex justify-around gap-2 flex-grow border-2 border-slate-300 p-2">
-          <div className="flex-grow border-2 border-slate-700 p-2">
-            This Month
-          </div>
-          <div className="flex-grow border-2 border-slate-700 p-2">
-            This Week
-          </div>
-          <div className="flex-grow border-2 border-slate-700 p-2">
-            This Day
-          </div>
-          <div className="flex-grow border-2 border-slate-700 p-2">
-            Input Form
-          </div>
+        <div className="flex justify-between gap-2 flex-grow h-1/2 border-2 border-slate-300 p-2">
+          <div className="flex-1 border-2 border-slate-700 p-2">This Month</div>
+          <div className="flex-1 border-2 border-slate-700 p-2">This Week</div>
+          <div className="flex-1 border-2 border-slate-700 p-2">This Day</div>
+          <div className="flex-1 border-2 border-slate-700 p-2">Input Form</div>
         </div>
 
-        <div className="flex-grow border-2 border-slate-300 p-4">
+        <div className="h-1/2 flex-grow border-2 border-slate-300 p-4">
           Detailed Analysis - 何を表示しようかな ...
         </div>
       </div>
