@@ -85,3 +85,24 @@ class TestPatchHousehold:
         assert resp_obj["amount"] == 99999
         assert resp_obj["memo"] != household.memo
         assert resp_obj["memo"] == "hello world"
+
+
+class TestDeleteHousehold:
+    def test_delete_household(self, client):
+        category = CategoryFactory.create_category(client, name=random_string())
+        household = HouseholdFactory.create_household(client, category_id=category.id)
+
+        resp = client.get("/households")
+        assert resp.status_code == status.HTTP_200_OK
+        assert len(resp.json()) == 1
+
+        resp = client.delete(f"/households/{household.id}")
+        assert resp.status_code == status.HTTP_200_OK
+
+        resp = client.get("/households")
+        assert resp.status_code == status.HTTP_200_OK
+        assert len(resp.json()) == 0
+
+    def test_delete_household_with_wrong_id(self, client):
+        resp = client.delete("/households/321")
+        assert resp.status_code == status.HTTP_404_NOT_FOUND

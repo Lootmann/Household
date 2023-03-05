@@ -62,3 +62,18 @@ def update_household(
             detail=f"Household: {household_id} Not Found",
         )
     return household_api.update_household(db, original, household_body)
+
+
+@router.delete(
+    "/households/{household_id}",
+    response_model=None,
+    status_code=status.HTTP_200_OK,
+)
+def delete_household(household_id: int, db: Session = Depends(get_db)):
+    original = household_api.find_by_id(db, household_id)
+    if not original:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Household: {household_id} Not Found",
+        )
+    return household_api.delete_household(db, original)

@@ -44,3 +44,8 @@ def update_household(
     db.refresh(original)
     return original
 
+
+def delete_household(db: Session, household: HouseholdModel) -> None:
+    db.delete(household)
+    db.commit()
+    return
