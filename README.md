@@ -1,5 +1,6 @@
 # Household FastAPI+React
 
+
 ## Endpoint
 
 ```
@@ -17,7 +18,15 @@ DEL   /households/{household_id}
 PATCH /households/{household_id}
 ```
 
+
+## Chart Plugins
+
+- https://recharts.org/en-US/
+- https://react-chartjs-2.js.org/
+
+
 ## Examples
+
 
 ### Zaim
 
