@@ -4,21 +4,13 @@ from typing import Optional
 from fastapi import HTTPException, status
 from pydantic import BaseModel, Field, validator
 
+from api.schemas import categories as category_schema
+
 
 class HouseholdBase(BaseModel):
     amount: int = Field(...)
     registered_at: date = Field(...)
     memo: str
-    category_id: int = Field(...)
-
-    @validator("amount")
-    def amount_should_be_positive(cls, val):
-        if val < 0:
-            raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail="Amount should be Positive",
-            )
-        return val
 
     class Config:
         orm_mode = True
@@ -34,7 +26,16 @@ class HouseholdBase(BaseModel):
 
 
 class HouseholdCreate(HouseholdBase):
-    pass
+    category_id: int = Field(...)
+
+    @validator("amount")
+    def amount_should_be_positive(cls, val):
+        if val < 0:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail="Amount should be Positive",
+            )
+        return val
 
 
 class HouseholdCreateResponse(HouseholdCreate):
@@ -71,3 +72,4 @@ class HouseholdUpdate(BaseModel):
 
 class Household(HouseholdBase):
     id: int
+    category: category_schema.Category

@@ -11,6 +11,20 @@ class TestGetAllHouseholds:
         assert resp.status_code == status.HTTP_200_OK
         assert resp.json() == []
 
+    def test_get_all_households_with_one_record(self, client):
+        category = CategoryFactory.create_category(client, name=random_string())
+        household = HouseholdFactory.create_household(client, category_id=category.id)
+
+        resp = client.get("/households")
+        assert resp.status_code == status.HTTP_200_OK
+
+        resp_obj = resp.json()[0]
+        assert resp_obj["amount"] == household.amount
+        assert resp_obj["memo"] == household.memo
+        assert resp_obj["registered_at"] == str(household.registered_at)
+        assert resp_obj["category"]["id"] == category.id
+        assert resp_obj["category"]["name"] == category.name
+
     def test_get_all_households(self, client):
         category = CategoryFactory.create_category(client, name=random_string())
 
@@ -29,6 +43,12 @@ class TestGetHousehold:
 
         resp = client.get(f"/households/{household.id}")
         assert resp.status_code == status.HTTP_200_OK
+
+        resp_obj = resp.json()
+        assert resp_obj["amount"] == household.amount
+        assert resp_obj["registered_at"] == str(household.registered_at)
+        assert resp_obj["memo"] == household.memo
+        assert resp_obj["category"] == category
 
     def test_get_household_with_wrong_id(self, client):
         resp = client.get(f"/households/312")
@@ -55,6 +75,19 @@ class TestPostHousehold:
         assert resp_obj["registered_at"] == today
         assert resp_obj["memo"] == "hoge"
         assert resp_obj["category_id"] == 1
+
+    def test_create_household_with_negative_amount(self, client):
+        category = CategoryFactory.create_category(client, name=random_string())
+
+        household_data = {
+            "amount": -1234,
+            "registered_at": str(date.today()),
+            "memo": "hoge",
+            "category_id": category.id,
+        }
+        resp = client.post("/households", json=household_data)
+        assert resp.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert resp.json() == {"detail": "Amount should be Positive"}
 
 
 class TestPatchHousehold:
@@ -95,6 +128,17 @@ class TestPatchHousehold:
     def test_patch_household_with_wrong_id(self, client):
         resp = client.patch("/households/123", json={})
         assert resp.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_patch_household_with_negative_amount(self, client):
+        category = CategoryFactory.create_category(client, name=random_string())
+        household = HouseholdFactory.create_household(client, category_id=category.id)
+
+        update_data = {
+            "amount": -1234,
+        }
+        resp = client.patch(f"/households/{household.id}", json=update_data)
+        assert resp.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+        assert resp.json() == {"detail": "Amount should be Positive"}
 
 
 class TestDeleteHousehold:
