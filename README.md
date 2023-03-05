@@ -1,5 +1,22 @@
 # Household FastAPI+React
 
+## Endpoint
+
+```
+# categories
+GET   /categories
+POST  /categories
+DEL   /categories/{category_id}
+PATCH /categories/{category_id}
+
+# households
+GET   /households
+POST  /households
+GET   /households/{household_id}
+DEL   /households/{household_id}
+PATCH /households/{household_id}
+```
+
 ## Examples
 
 ### Zaim
