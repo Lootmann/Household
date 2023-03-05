@@ -10,7 +10,7 @@ from api.settings import Settings
 setting = Settings()
 
 
-@pytest.fixture
+@pytest.fixture(autouse=True)
 def client() -> TestClient:
     engine = create_engine(setting.test_db_url, echo=False)
     session = sessionmaker(
