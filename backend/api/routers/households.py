@@ -43,3 +43,22 @@ def create_household(
     household_body: household_schema.HouseholdCreate, db: Session = Depends(get_db)
 ):
     return household_api.create_household(db, household_body)
+
+
+@router.patch(
+    "/households/{household_id}",
+    response_model=household_schema.HouseholdCreateResponse,
+    status_code=status.HTTP_200_OK,
+)
+def update_household(
+    household_id: int,
+    household_body: household_schema.HouseholdUpdate,
+    db: Session = Depends(get_db),
+):
+    original = household_api.find_by_id(db, household_id)
+    if not original:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Household: {household_id} Not Found",
+        )
+    return household_api.update_household(db, original, household_body)

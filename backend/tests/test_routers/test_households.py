@@ -55,3 +55,33 @@ class TestPostHousehold:
         assert resp_obj["registered_at"] == today
         assert resp_obj["memo"] == "hoge"
         assert resp_obj["category_id"] == 1
+
+
+class TestPatchHousehold:
+    def test_patch_household_empty_fields(self, client):
+        category = CategoryFactory.create_category(client, name=random_string())
+        household = HouseholdFactory.create_household(client, category_id=category.id)
+
+        update_data = {}
+        resp = client.patch(f"/households/{household.id}", json=update_data)
+        assert resp.status_code == status.HTTP_200_OK
+
+        resp_obj = resp.json()
+        assert resp_obj["amount"] == household.amount
+        assert resp_obj["memo"] == household.memo
+        assert resp_obj["registered_at"] == str(household.registered_at)
+        assert resp_obj["category_id"] == household.category_id
+
+    def test_patch_household_with_some_field(self, client):
+        category = CategoryFactory.create_category(client, name=random_string())
+        household = HouseholdFactory.create_household(client, category_id=category.id)
+
+        update_data = {"amount": 99999, "memo": "hello world"}
+        resp = client.patch(f"/households/{household.id}", json=update_data)
+        assert resp.status_code == status.HTTP_200_OK
+
+        resp_obj = resp.json()
+        assert resp_obj["amount"] != household.amount
+        assert resp_obj["amount"] == 99999
+        assert resp_obj["memo"] != household.memo
+        assert resp_obj["memo"] == "hello world"
