@@ -46,3 +46,9 @@ def update_category(
     db.commit()
     db.refresh(origin)
     return origin
+
+
+def delete_category(db: Session, category: CategoryModel) -> None:
+    db.delete(category)
+    db.commit()
+    return

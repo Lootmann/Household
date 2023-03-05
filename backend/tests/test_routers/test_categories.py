@@ -66,3 +66,19 @@ class TestUpdateCategories:
         category_data = {"name": random_string()}
         resp = client.patch("/categories/12335", json=category_data)
         assert resp.status_code == status.HTTP_404_NOT_FOUND
+
+
+class TestDeleteCategories:
+    def test_delete_category(self, client):
+        resp = client.post("/categories", json={"name": random_string()})
+        assert resp.status_code == status.HTTP_201_CREATED
+
+        category_id = resp.json()["id"]
+
+        resp = client.delete(f"/categories/{category_id}")
+        assert resp.status_code == status.HTTP_200_OK
+        assert resp.json() == None
+
+    def test_delete_category_with_wrong_id(self, client):
+        resp = client.delete("/categories/123")
+        assert resp.status_code == status.HTTP_404_NOT_FOUND

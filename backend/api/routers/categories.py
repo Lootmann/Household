@@ -62,3 +62,19 @@ def update_category(
         )
 
     return category_api.update_category(db, origin, category_body)
+
+
+@router.delete(
+    "/categories/{category_id}",
+    response_model=None,
+    status_code=status.HTTP_200_OK,
+)
+def delete_category(category_id: int, db: Session = Depends(get_db)):
+    category = category_api.find_by_id(db, category_id)
+    if not category:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Category: {category_id} Not Found",
+        )
+
+    return category_api.delete_category(db, category)
