@@ -1,12 +1,11 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, status
-from fastapi.exceptions import HTTPException
-from sqlalchemy.orm import Session
-
 from api.cruds import categories as category_api
 from api.db import get_db
 from api.schemas import categories as category_schema
+from fastapi import APIRouter, Depends, status
+from fastapi.exceptions import HTTPException
+from sqlalchemy.orm import Session
 
 router = APIRouter(tags=["users"])
 
