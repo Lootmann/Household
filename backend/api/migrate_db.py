@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 
-from api.models.users import User
+from api.models.categories import User
 from api.settings import Settings
 
 setting = Settings()
