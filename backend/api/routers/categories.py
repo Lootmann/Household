@@ -21,7 +21,7 @@ def get_all_categories(db: Session = Depends(get_db)):
 
 @router.post(
     "/categories",
-    response_model=category_schema.CategorCreateResponse,
+    response_model=category_schema.CategoryCreateResponse,
     status_code=status.HTTP_201_CREATED,
 )
 def create_category(
@@ -39,7 +39,7 @@ def create_category(
 
 @router.patch(
     "/categories/{category_id}",
-    response_model=category_schema.CategorCreateResponse,
+    response_model=category_schema.CategoryCreateResponse,
     status_code=status.HTTP_200_OK,
 )
 def update_category(

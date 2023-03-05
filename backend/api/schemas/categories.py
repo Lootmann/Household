@@ -17,7 +17,7 @@ class CategoryCreate(CategoryBase):
         }
 
 
-class CategorCreateResponse(CategoryCreate):
+class CategoryCreateResponse(CategoryCreate):
     id: int
 
 

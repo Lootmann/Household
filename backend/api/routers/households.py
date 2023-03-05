@@ -17,3 +17,14 @@ router = APIRouter(tags=["households"])
 )
 def get_all_households(db: Session = Depends(get_db)):
     return household_api.get_all_households(db)
+
+
+@router.post(
+    "/households",
+    response_model=household_schema.HouseholdCreateResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def create_household(
+    household_body: household_schema.HouseholdCreate, db: Session = Depends(get_db)
+):
+    return household_api.create_household(db, household_body)
