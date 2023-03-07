@@ -55,6 +55,106 @@ class TestGetHousehold:
         assert resp.status_code == status.HTTP_404_NOT_FOUND
 
 
+class TestGetHouseholdFilteredByDate:
+    def test_get_household_filtered_by_year(self, client):
+        # create households
+        # 2 of 2023's records and 5 of 2022's records
+        category = CategoryFactory.create_category(client, name=random_string())
+        for _ in range(2):
+            HouseholdFactory.create_household(
+                client,
+                registered_at=date(year=2022, month=1, day=1),
+                category_id=category.id,
+            )
+
+        for _ in range(5):
+            HouseholdFactory.create_household(
+                client,
+                registered_at=date(year=2023, month=1, day=1),
+                category_id=category.id,
+            )
+
+        resp = client.get("/households")
+        assert len(resp.json()) == 7
+
+        resp = client.get("/households/search?year=2022")
+        assert len(resp.json()) == 2
+
+        resp = client.get("/households/search?year=2023")
+        assert len(resp.json()) == 5
+
+    def test_get_households_filtered_by_year_and_month(self, client):
+        category = CategoryFactory.create_category(client, name=random_string())
+
+        # 5 of 2022-05, 3 of 2022-08
+        for _ in range(5):
+            HouseholdFactory.create_household(
+                client,
+                registered_at=date(year=2022, month=5, day=1),
+                category_id=category.id,
+            )
+        for _ in range(3):
+            HouseholdFactory.create_household(
+                client,
+                registered_at=date(year=2022, month=8, day=1),
+                category_id=category.id,
+            )
+
+        # 2 of 2023-01, 8 of 2023-04
+        for _ in range(2):
+            HouseholdFactory.create_household(
+                client,
+                registered_at=date(year=2023, month=1, day=1),
+                category_id=category.id,
+            )
+        for _ in range(8):
+            HouseholdFactory.create_household(
+                client,
+                registered_at=date(year=2023, month=4, day=1),
+                category_id=category.id,
+            )
+
+        # 2022
+        resp = client.get("/households/search?year=2022&month=5")
+        assert len(resp.json()) == 5
+
+        resp = client.get("/households/search?year=2022&month=8")
+        assert len(resp.json()) == 3
+
+        resp = client.get("/households/search?year=2022")
+        assert len(resp.json()) == 8
+
+        # 2023
+        resp = client.get("/households/search?year=2023&month=1")
+        assert len(resp.json()) == 2
+
+        resp = client.get("/households/search?year=2023&month=4")
+        assert len(resp.json()) == 8
+
+        resp = client.get("/households/search?year=2023")
+        assert len(resp.json()) == 10
+
+    def test_get_households_with_invalid_data(self, client):
+        category = CategoryFactory.create_category(client, name=random_string())
+        for _ in range(2):
+            HouseholdFactory.create_household(
+                client,
+                registered_at=date(year=2022, month=1, day=1),
+                category_id=category.id,
+            )
+            HouseholdFactory.create_household(
+                client,
+                registered_at=date(year=2023, month=1, day=1),
+                category_id=category.id,
+            )
+
+        resp = client.get("/households")
+        assert len(resp.json()) == 4
+
+        resp = client.get("/households/search?month=12")
+        assert resp.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+
 class TestPostHousehold:
     def test_create_household(self, client):
         category = CategoryFactory.create_category(client, name=random_string())

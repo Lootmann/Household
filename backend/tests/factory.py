@@ -26,6 +26,7 @@ class HouseholdFactory:
         memo: str = random_string(),
         category_id: int = randint(0, 10),
     ):
+        # FIXME: amount = randint(..) returns always same value when each time it is executed.
         household_data = {
             "amount": amount,
             "registered_at": str(registered_at),

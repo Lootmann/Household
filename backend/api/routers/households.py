@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -17,6 +17,23 @@ router = APIRouter(tags=["households"])
 )
 def get_all_households(db: Session = Depends(get_db)):
     return household_api.get_all_households(db)
+
+
+@router.get(
+    "/households/search",
+    response_model=List[household_schema.Household],
+    status_code=status.HTTP_200_OK,
+)
+def find_households_by_date(
+        year: int, month: Optional[int] = None, db: Session = Depends(get_db)
+):
+    # year is required, month is not mandatory
+    if year is None:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=f"Search: Year is required",
+        )
+    return household_api.find_households_by_date(db, year, month)
 
 
 @router.get(
@@ -40,7 +57,7 @@ def get_household_by_id(household_id: int, db: Session = Depends(get_db)):
     status_code=status.HTTP_201_CREATED,
 )
 def create_household(
-    household_body: household_schema.HouseholdCreate, db: Session = Depends(get_db)
+        household_body: household_schema.HouseholdCreate, db: Session = Depends(get_db)
 ):
     return household_api.create_household(db, household_body)
 
@@ -51,9 +68,9 @@ def create_household(
     status_code=status.HTTP_200_OK,
 )
 def update_household(
-    household_id: int,
-    household_body: household_schema.HouseholdUpdate,
-    db: Session = Depends(get_db),
+        household_id: int,
+        household_body: household_schema.HouseholdUpdate,
+        db: Session = Depends(get_db),
 ):
     original = household_api.find_by_id(db, household_id)
     if not original:
