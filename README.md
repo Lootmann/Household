@@ -11,6 +11,7 @@ PATCH /categories/{category_id}
 
 # households
 GET   /households
+GET   /households/search?year=0000&month=00
 POST  /households
 GET   /households/{household_id}
 DEL   /households/{household_id}
@@ -19,8 +20,6 @@ PATCH /households/{household_id}
 
 
 ## Examples
-
-### Zaim
 
 入力
 
@@ -49,4 +48,3 @@ eyJから始まってるけど JWTじゃないっぽい?
   - 今月の利用料金のCategory別の詳細が表示されている
 
 いい感じこれを実装してみよう
-というかReactで項目を丸パクリしてみる
