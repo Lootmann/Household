@@ -2,7 +2,7 @@ import axios from "axios";
 import React from "react";
 
 import Aggregate from "../Aggregates/Aggregate";
-import { BASE_API_URL, getThisMonthDate } from "../util";
+import { BASE_API_URL, getCurrentDate } from "../util";
 import InputForm from "./InputForm";
 
 function Main() {
@@ -10,7 +10,7 @@ function Main() {
   const [categories, setCategories] = React.useState<CategoryType[]>([]);
 
   React.useEffect(() => {
-    const [year, month] = getThisMonthDate();
+    const [year, month] = getCurrentDate();
 
     axios
       .get(BASE_API_URL + `/households?year=${year}&month=${month}`)

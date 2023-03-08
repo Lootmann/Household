@@ -2,12 +2,7 @@ import React from "react";
 
 import { ResponsiveBar } from "@nivo/bar";
 
-import {
-  convertDataFromAPIToChartData,
-  createDay,
-  createMonth,
-  createWeek,
-} from "./converter";
+import { createDay, createMonth, createWeek } from "./converter";
 
 function Aggregate({ households, categories }: AggregateProp) {
   // 'data' is used for ResponsiveBar.
@@ -21,11 +16,13 @@ function Aggregate({ households, categories }: AggregateProp) {
     households: HouseholdType[],
     categories: CategoryType[]
   ) {
-    const converted = convertDataFromAPIToChartData(households, categories);
     const res: any = [];
-    res.push(createDay(converted));
-    res.push(createWeek(converted));
-    res.push(createMonth(converted));
+    res.push(createDay(households, categories));
+    // res.push(createWeek(converted));
+    res.push(createMonth(households, categories));
+
+    console.log(res);
+
     return res;
   }
 

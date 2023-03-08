@@ -1,49 +1,33 @@
 /**
- * converter.ts
- */
+    converter.ts
 
-/**
- * convert data for Nivo Bar Chartdata
- *
- * Nivo 'ResponsesiveBar' requires
- * Array<{ string, number}>
- *
- * @param {HouseholdType[]} households
- * @param {CategoryType[]} categories
- * @return {APIHouseholdType[]}
- */
-export function convertDataFromAPIToChartData(
+    Nivo ResponsiveBar requires 'data' args. 'data' is like
+    data = [
+        title: "Unique String",
+        "key1": number,
+        "key2": number,
+        ...
+    ]
+        
+    And 'keys' are
+    keys = ["key1", "key2", "key3", ...]
+*/
+import { getCurrentDate, getDateFromDateString } from "../util";
+
+export function createMonth(
   households: HouseholdType[],
   categories: CategoryType[]
-): APIHouseholdType[] {
-  // FIXME: new Map<CategoryType, number> is not working - has, get is wrong D:
-  const household_map = new Map<number, number>();
+) {
+  const res: any = { title: "Month" };
+  categories.map((category) => {
+    res[category.name] = 0;
+  });
 
   households.map((household) => {
-    const amount: number | undefined = household_map.get(household.category.id);
-
-    if (amount === undefined) {
-      household_map.set(household.category.id, household.amount);
-    } else {
-      household_map.set(household.category.id, amount + household.amount);
-    }
+    const categoryName = household.category.name;
+    res[categoryName] += household.amount;
   });
 
-  const res: { category: CategoryType; amount: number }[] = [];
-  categories.map((category) => {
-    const amount = household_map.get(category.id);
-    if (amount !== undefined) res.push({ category: category, amount: amount });
-  });
-
-  return res;
-}
-
-// IMPL: create month
-export function createMonth(households: APIHouseholdType[]) {
-  const res: any = { title: "Month" };
-  households.map((h) => {
-    res[h.category.name] = h.amount;
-  });
   return res;
 }
 
@@ -57,11 +41,25 @@ export function createWeek(households: APIHouseholdType[]) {
   return res;
 }
 
-// IMPL: create this day
-export function createDay(households: APIHouseholdType[]) {
-  const res: any = { title: "Day" };
-  households.map((h) => {
-    res[h.category.name] = h.amount;
+export function createDay(
+  households: HouseholdType[],
+  categories: CategoryType[]
+) {
+  const res: any = { title: "Today" };
+  categories.map((category) => {
+    res[category.name] = 0;
   });
+
+  // get current day
+  const [, , day] = getCurrentDate();
+
+  households.map((household) => {
+    const [, , currentDay] = getDateFromDateString(household.registered_at);
+    if (currentDay == day) {
+      const categoryName = household.category.name;
+      res[categoryName] += household.amount;
+    }
+  });
+
   return res;
 }

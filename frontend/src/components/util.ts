@@ -18,8 +18,26 @@ export function getToday(): string {
   return `${year}-${month}-${day}`;
 }
 
-// for Main Layout.tsx Chart data
-export function getThisMonthDate(): [number, number] {
+/**
+ * get current date
+ *
+ * @returns {[number, number, number]} year, month day
+ */
+export function getCurrentDate(): [number, number, number] {
   const date = new Date();
-  return [date.getFullYear(), date.getMonth() + 1];
+  return [date.getFullYear(), date.getMonth() + 1, date.getDate()];
+}
+
+/**
+ * get date (Date()) from date string
+ * date string format is 'YYYY-MM-DD'
+ *
+ * @param {string} dateString
+ * @returns {number, number, number} [year, month, day]
+ */
+export function getDateFromDateString(
+  dateString: string
+): [number, number, number] {
+  const date = new Date(dateString);
+  return [date.getFullYear(), date.getMonth() + 1, date.getDay()];
 }
