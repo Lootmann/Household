@@ -63,7 +63,9 @@ function Main() {
     <div className="h-full flex flex-col gap-2">
       <div className="h-1/2 flex-grow flex justify-between gap-2 border-2 border-slate-300 p-2">
         <div className="flex-1 border-2 border-slate-700 p-2">
-          <ThisMonth households={households_by_each_categories} />
+          {households_by_each_categories.length > 0 && (
+            <ThisMonth households={households_by_each_categories} />
+          )}
         </div>
         <div className="flex-1 border-2 border-slate-700 p-2">This Week</div>
         <div className="flex-1 border-2 border-slate-700 p-2">This Day</div>
