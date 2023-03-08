@@ -10,31 +10,38 @@ function Main() {
     APIHouseholdType[]
   >([]);
 
-  // FIXME: Get from 2 data from API, and convert data to make chart
-  // FIXME: Is there a better way to do this?
   React.useEffect(() => {
     const convert_api_to_data = async (
       categories: CategoryType[],
       households: HouseholdType[]
     ) => {
-      const res: Array<{ category: CategoryType; amount: number }> = [];
+      // FIXME: new Map<CategoryType, number> is not working - has, get is wrong D:
+      const household_map = new Map<number, number>();
 
-      categories.forEach((category) => {
-        res.push({ category: category, amount: 0 });
+      households.map((household) => {
+        const amount: number | undefined = household_map.get(
+          household.category.id
+        );
+
+        if (amount === undefined) {
+          household_map.set(household.category.id, household.amount);
+        } else {
+          household_map.set(household.category.id, amount + household.amount);
+        }
       });
 
-      // TODO: refactor - this looks wrong :^) Map<CategoryType, number> ?
-      households.forEach((household) => {
-        res.forEach((r) => {
-          if (r.category.id === household.category.id) {
-            r.amount += household.amount;
-          }
-        });
+      const res: { category: CategoryType; amount: number }[] = [];
+      categories.map((category) => {
+        const amount = household_map.get(category.id);
+        if (amount !== undefined)
+          res.push({ category: category, amount: amount });
       });
+
       return res;
     };
 
-    // get 2 data from API
+    // FIXME: Get from 2 data from API, and convert data to make chart
+    // FIXME: Is there a better way to do this?
     const get_data_from_api = async () => {
       let categories: CategoryType[] = [];
       let households: HouseholdType[] = [];
@@ -52,7 +59,6 @@ function Main() {
         });
 
       const res = await convert_api_to_data(categories, households);
-      console.log(res);
       setHouseholds(res);
     };
 
