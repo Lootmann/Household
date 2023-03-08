@@ -1,13 +1,13 @@
-import React from "react";
 import axios from "axios";
+import React from "react";
 
-const BASE_URL = "http://localhost:8888";
+import { BASE_API_URL } from "../util";
 
 function History() {
   const [histories, setHistories] = React.useState<HouseholdType[]>([]);
 
   React.useEffect(() => {
-    axios.get(BASE_URL + "/households").then((resp) => {
+    axios.get(BASE_API_URL + "/households").then((resp) => {
       setHistories(resp.data);
     });
   }, []);
