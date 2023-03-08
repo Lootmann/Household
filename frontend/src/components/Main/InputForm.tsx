@@ -6,10 +6,11 @@ const BASE_URL = "http://localhost:8888";
 function InputForm() {
   const [categories, setCategories] = React.useState<CategoryType[]>([]);
   const [householdForm, setHouseholdForm] = React.useState<HouseholdType>({
+    id: 0,
     amount: 0,
     registered_at: "",
     memo: "",
-    category: 0,
+    category_id: 0,
   });
 
   React.useEffect(() => {
@@ -22,16 +23,28 @@ function InputForm() {
       setHouseholdForm({
         ...householdForm,
         registered_at: getToday(),
-        category: Number(categories_from_api[0].id),
+        category_id: Number(categories_from_api[0].id),
       });
     });
   }, []);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    // TODO: when submit data, and returns HTTP 201 status from API,
     // TODO: ReRender top page infos
     e.preventDefault();
     console.log(householdForm);
+    axios
+      .post(BASE_URL + "/households", {
+        amount: householdForm.amount,
+        registered_at: householdForm.registered_at,
+        memo: householdForm.memo,
+        category_id: householdForm.category_id,
+      })
+      .then((resp) => {
+        console.log(resp);
+        console.log(resp.data);
+      });
+
+    // TODO: clear submit form
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
