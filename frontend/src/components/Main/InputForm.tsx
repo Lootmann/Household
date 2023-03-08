@@ -1,7 +1,7 @@
-import React from "react";
 import axios from "axios";
+import React from "react";
 
-const BASE_URL = "http://localhost:8888";
+import { BASE_URL, getToday } from "../util";
 
 function InputForm() {
   const [categories, setCategories] = React.useState<CategoryType[]>([]);
@@ -10,7 +10,7 @@ function InputForm() {
     amount: 0,
     registered_at: "",
     memo: "",
-    category_id: 0,
+    category: { id: 0, name: "hoge" },
   });
 
   React.useEffect(() => {
@@ -23,28 +23,34 @@ function InputForm() {
       setHouseholdForm({
         ...householdForm,
         registered_at: getToday(),
-        category_id: Number(categories_from_api[0].id),
+        category: categories_from_api[0],
       });
     });
   }, []);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    // TODO: ReRender top page infos
     e.preventDefault();
-    console.log(householdForm);
+
     axios
       .post(BASE_URL + "/households", {
         amount: householdForm.amount,
         registered_at: householdForm.registered_at,
         memo: householdForm.memo,
-        category_id: householdForm.category_id,
+        category_id: householdForm.category.id,
       })
       .then((resp) => {
         console.log(resp);
         console.log(resp.data);
       });
 
-    // TODO: clear submit form
+    // clear form
+    setHouseholdForm({
+      id: 0,
+      amount: 0,
+      registered_at: getToday(),
+      memo: "",
+      category: categories[0],
+    });
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -62,22 +68,6 @@ function InputForm() {
     e.preventDefault();
     const { name, value } = e.target;
     setHouseholdForm((prevForm) => ({ ...prevForm, [name]: Number(value) }));
-  }
-
-  /**
-   * get current today 'Date'
-   * date format is 'yyyy-MM-DD' and e.g getMonth() returns 0, 1, ..., 12
-   * so I need getMonth(), and getDay() requires 0 padding when number is One digit.
-   * @returns string: yyyy-MM-DD
-   */
-  function getToday(): string {
-    const date = new Date();
-    const [year, month, day] = [
-      date.getFullYear(),
-      (date.getMonth() + 1).toString().padStart(2, "0"),
-      date.getDate().toString().padStart(2, "0"),
-    ];
-    return `${year}-${month}-${day}`;
   }
 
   return (

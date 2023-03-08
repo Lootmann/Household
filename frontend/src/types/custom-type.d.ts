@@ -8,5 +8,11 @@ type HouseholdType = {
   amount: number;
   registered_at: string;
   memo: string;
-  category_id: number;
+  category: CategoryType;
+};
+
+// FIXME: find a good way
+type APIHouseholdType = {
+  category: CategoryType;
+  amount: number;
 };
