@@ -19,6 +19,24 @@ PATCH /households/{household_id}
 ```
 
 
+### Thinking  🤔
+
+- 今日のHouseholdsのデータが欲しい場合
+  - 1. 専用のAPIを用意しておく
+    - `/households/search?year=<int>&month=<int>&day=<int>`
+    - 利点: 楽
+    - 欠点: APIが大量に必要になる？ response_schema たくさん必要になるし修正点が増えまくる気がする
+
+  - 2. 大雑把に取得して Frontend 側で処理をする
+    - 常に今月、今週、今日のデータを表示しておくので月ごとに取得すれば全部表示できる
+    - API はここまでで抑えておいて`/households/search?year=<int>&month=<int>`
+    - React で filter かけてデータを変換して Nivo に渡してChartを描画
+    - 利点: 楽 こっちのほうが柔軟性はありそう
+    - 欠点: Frontend 側での処理は単純に重い？
+    - 今月分のデータだと一日10回もの購入していると仮定しても(ありえない)大した量のデータにはならないけど
+    - 31 days * 10 items = 310 `{id, category, amount, registered_at}` というだけのデータなのでやっぱり少ない
+
+
 ## Examples
 
 入力
