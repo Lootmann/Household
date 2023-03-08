@@ -5,12 +5,11 @@ import { BASE_API_URL, getToday } from "../util";
 
 function InputForm() {
   const [categories, setCategories] = React.useState<CategoryType[]>([]);
-  const [householdForm, setHouseholdForm] = React.useState<HouseholdType>({
-    id: 0,
+  const [householdForm, setHouseholdForm] = React.useState<HouseholdFormType>({
     amount: 0,
     registered_at: "",
     memo: "",
-    category: { id: 0, name: "hoge" },
+    category_id: 0,
   });
 
   React.useEffect(() => {
@@ -23,7 +22,7 @@ function InputForm() {
       setHouseholdForm({
         ...householdForm,
         registered_at: getToday(),
-        category: categories_from_api[0],
+        category_id: categories_from_api[0].id,
       });
     });
   }, []);
@@ -36,7 +35,7 @@ function InputForm() {
         amount: householdForm.amount,
         registered_at: householdForm.registered_at,
         memo: householdForm.memo,
-        category_id: householdForm.category.id,
+        category_id: householdForm.category_id,
       })
       .then((resp) => {
         console.log(resp);
@@ -45,11 +44,10 @@ function InputForm() {
 
     // clear form
     setHouseholdForm({
-      id: 0,
       amount: 0,
       registered_at: getToday(),
       memo: "",
-      category: categories[0],
+      category_id: categories[0].id,
     });
   }
 
@@ -66,8 +64,11 @@ function InputForm() {
 
   function handleChangeSelect(e: React.ChangeEvent<HTMLSelectElement>) {
     e.preventDefault();
-    const { name, value } = e.target;
-    setHouseholdForm((prevForm) => ({ ...prevForm, [name]: Number(value) }));
+    const { value } = e.target;
+    setHouseholdForm((prevForm) => ({
+      ...prevForm,
+      category_id: Number(value),
+    }));
   }
 
   return (

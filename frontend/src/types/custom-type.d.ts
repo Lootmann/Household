@@ -11,6 +11,13 @@ type HouseholdType = {
   category: CategoryType;
 };
 
+type HouseholdFormType = {
+  amount: number;
+  registered_at: string;
+  memo: string;
+  category_id: number;
+};
+
 type AggregateProp = {
   households: HouseholdType[];
   categories: CategoryType[];
