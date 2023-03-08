@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react";
 
-import ThisMonth from "../Aggregates/ThisMonth";
+import Aggregate from "../Aggregates/Aggregate";
 import { BASE_API_URL, getThisMonthDate } from "../util";
 import InputForm from "./InputForm";
 
@@ -68,20 +68,24 @@ function Main() {
   return (
     <div className="h-full flex flex-col gap-2">
       <div className="h-1/2 flex-grow flex justify-between gap-2 border-2 border-slate-300 p-2">
-        <div className="flex-1 border-2 border-slate-700 p-2">
+        <div className="flex-2 border-2 border-slate-700 p-2">
           {households_by_each_categories.length > 0 && (
-            <ThisMonth households={households_by_each_categories} />
+            <Aggregate households={households_by_each_categories} />
           )}
         </div>
-        <div className="flex-1 border-2 border-slate-700 p-2">This Week</div>
-        <div className="flex-1 border-2 border-slate-700 p-2">This Day</div>
+        <div className="flex-1 border-2 border-slate-700 p-2">
+          <h2 className="text-2xl">Pie Chart ?</h2>
+        </div>
         <div className="flex-1 border-2 border-slate-700 p-2">
           <InputForm />
         </div>
       </div>
 
-      <div className="h-1/2 flex-grow border-2 border-slate-300 p-4">
-        Detailed Analysis - 何を表示しようかな ...
+      <div className="h-1/2 flex-grow border-2 border-slate-300 bg-black p-4">
+        <p className="text-xl text-slate-400">
+          <b>Detailed Analysis</b> - 何を表示しようかな
+        </p>
+        <img src="../../assets/bitdance.gif" alt="" />
       </div>
     </div>
   );
