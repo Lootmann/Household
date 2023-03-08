@@ -1,4 +1,4 @@
-export const BASE_URL = "http://localhost:8888";
+export const BASE_API_URL = "http://localhost:8888";
 
 /**
  * get current today 'Date'

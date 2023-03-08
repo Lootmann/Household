@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react";
 
-import { BASE_URL, getToday } from "../util";
+import { BASE_API_URL, getToday } from "../util";
 
 function InputForm() {
   const [categories, setCategories] = React.useState<CategoryType[]>([]);
@@ -14,7 +14,7 @@ function InputForm() {
   });
 
   React.useEffect(() => {
-    axios.get(BASE_URL + "/categories").then((resp) => {
+    axios.get(BASE_API_URL + "/categories").then((resp) => {
       // get all categories
       const categories_from_api = resp.data;
       setCategories(categories_from_api);
@@ -32,7 +32,7 @@ function InputForm() {
     e.preventDefault();
 
     axios
-      .post(BASE_URL + "/households", {
+      .post(BASE_API_URL + "/households", {
         amount: householdForm.amount,
         registered_at: householdForm.registered_at,
         memo: householdForm.memo,

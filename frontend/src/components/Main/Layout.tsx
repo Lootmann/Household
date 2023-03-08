@@ -2,7 +2,7 @@ import axios from "axios";
 import React from "react";
 
 import ThisMonth from "../Aggregates/ThisMonth";
-import { BASE_URL, getThisMonthDate } from "../util";
+import { BASE_API_URL, getThisMonthDate } from "../util";
 import InputForm from "./InputForm";
 
 function Main() {
@@ -39,14 +39,14 @@ function Main() {
       let categories: CategoryType[] = [];
       let households: HouseholdType[] = [];
 
-      await axios.get(BASE_URL + "/categories").then((resp) => {
+      await axios.get(BASE_API_URL + "/categories").then((resp) => {
         categories = resp.data;
       });
 
       // get this month data
       const [year, month] = getThisMonthDate();
       await axios
-        .get(BASE_URL + `/households?year=${year}&month=${month}`)
+        .get(BASE_API_URL + `/households?year=${year}&month=${month}`)
         .then((resp) => {
           households = resp.data;
         });
