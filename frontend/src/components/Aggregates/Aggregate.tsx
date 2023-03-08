@@ -2,54 +2,40 @@ import React from "react";
 
 import { ResponsiveBar } from "@nivo/bar";
 
-function Aggregate({ households }: { households: APIHouseholdType[] }) {
+import {
+  convertDataFromAPIToChartData,
+  createDay,
+  createMonth,
+  createWeek,
+} from "./converter";
+
+function Aggregate({ households, categories }: AggregateProp) {
+  // 'data' is used for ResponsiveBar.
+  // FIXME: set TypeHint
   const [data, setData] = React.useState<any>([]);
+
+  // 'keys' is also too.
   const [keys, setKeys] = React.useState<string[]>([]);
 
-  // IMPL: create month
-  function createMonth(households: APIHouseholdType[]) {
-    const res: any = { title: "Month" };
-    households.map((h) => {
-      res[h.category.name] = h.amount;
-    });
-    return res;
-  }
-
-  // IMPL: create this week
-  function createWeek(households: APIHouseholdType[]) {
-    const res: any = { title: "Week" };
-    households.map((h) => {
-      res[h.category.name] = h.amount;
-    });
-    return res;
-  }
-
-  // IMPL: create this day
-  function createDay(households: APIHouseholdType[]) {
-    const res: any = { title: "Day" };
-    households.map((h) => {
-      res[h.category.name] = h.amount;
-    });
-    return res;
-  }
-
-  // all bar chart data needs 'title' key
-  function create_data() {
+  function createChartData(
+    households: HouseholdType[],
+    categories: CategoryType[]
+  ) {
+    const converted = convertDataFromAPIToChartData(households, categories);
     const res: any = [];
-    res.push(createDay(households));
-    res.push(createWeek(households));
-    res.push(createMonth(households));
+    res.push(createDay(converted));
+    res.push(createWeek(converted));
+    res.push(createMonth(converted));
     return res;
+  }
+
+  function createChartKeys(categories: CategoryType[]) {
+    return categories.map((category) => category.name);
   }
 
   React.useEffect(() => {
-    setData(create_data());
-
-    setKeys(
-      households.map((h) => {
-        return h.category.name;
-      })
-    );
+    setData(createChartData(households, categories));
+    setKeys(createChartKeys(categories));
   }, []);
 
   return (
@@ -99,14 +85,14 @@ function Aggregate({ households }: { households: APIHouseholdType[] }) {
               {
                 dataFrom: "keys",
                 anchor: "bottom",
-                direction: "column",
-                itemWidth: 50,
-                itemHeight: 20,
+                direction: "row",
+                itemWidth: 200,
+                itemHeight: 0,
               },
             ]}
-            margin={{ top: 40, right: 80, bottom: 90, left: 90 }}
-            padding={0.5}
-            innerPadding={2}
+            margin={{ top: 50, right: 80, bottom: 100, left: 90 }}
+            padding={0.4}
+            innerPadding={3}
             groupMode="stacked"
             layout="horizontal"
             minValue={0}

@@ -11,6 +11,11 @@ type HouseholdType = {
   category: CategoryType;
 };
 
+type AggregateProp = {
+  households: HouseholdType[];
+  categories: CategoryType[];
+};
+
 // FIXME: find a good way
 type APIHouseholdType = {
   category: CategoryType;
