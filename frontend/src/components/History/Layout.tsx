@@ -7,6 +7,7 @@ function History() {
   const [histories, setHistories] = React.useState<HouseholdType[]>([]);
 
   React.useEffect(() => {
+    // TODO: change api for pagination
     axios.get(BASE_API_URL + "/households").then((resp) => {
       setHistories(resp.data);
     });
