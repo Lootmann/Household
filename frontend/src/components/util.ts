@@ -49,3 +49,14 @@ export function getDateFromDateString(
   const date = new Date(dateString);
   return [date.getFullYear(), date.getMonth() + 1, date.getDay()];
 }
+
+// FIXME: ambigouous name
+export function calcDate(
+  year: number,
+  month: number,
+  diff: number
+): [number, number] {
+  const date = new Date(`${year}-${month}`);
+  date.setMonth(date.getMonth() + diff);
+  return [date.getFullYear(), date.getMonth() + 1];
+}

@@ -22,3 +22,8 @@ type AggregateProp = {
   households: HouseholdType[];
   categories: CategoryType[];
 };
+
+type HistoryLoaderType = {
+  year: number;
+  month: number;
+};

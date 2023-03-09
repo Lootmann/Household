@@ -2,8 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import Main from "./components/Main/Layout";
 import Root from "./components/Root";
-import History from "./components/History/Layout";
-import { getYear, getMonth } from "./components/util";
+import History, { loader as historyLoader } from "./components/History/Layout";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -16,8 +15,9 @@ const router = createBrowserRouter([
         element: <Main />,
       },
       {
-        path: "/histories",
-        element: <History year={getYear()} month={getMonth()} />,
+        path: "/histories/:year/:month",
+        element: <History />,
+        loader: historyLoader,
       },
     ],
   },
