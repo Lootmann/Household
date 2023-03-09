@@ -27,7 +27,9 @@ PATCH /households/{household_id}
 - backend
   - [x] `/households/search?year=<int>&month=<int>&day=<int>`]
   - [ ] `/households?limit=<int>&offset=<int>` for page nation
-  - [ ] `/households` order by registered_at
+  - [x] `/households` order by registered_at
+    - registered_at は `yyyy-mm-dd` なので細かく同日のソート順は適当だけどこれでいいや
+    - 見栄えのために一応 category_id でソートする
 
 
 ## Examples
