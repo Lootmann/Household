@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import Main from "./components/Main/Layout";
 import Root from "./components/Root";
 import History from "./components/History/Layout";
+import { getYear, getMonth } from "./components/util";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -16,7 +17,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/histories",
-        element: <History />,
+        element: <History year={getYear()} month={getMonth()} />,
       },
     ],
   },

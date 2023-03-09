@@ -28,6 +28,14 @@ export function getCurrentDate(): [number, number, number] {
   return [date.getFullYear(), date.getMonth() + 1, date.getDay()];
 }
 
+export function getYear(): number {
+  return new Date().getFullYear();
+}
+
+export function getMonth(): number {
+  return new Date().getMonth() + 1;
+}
+
 /**
  * get date (Date()) from date string
  * date string format is 'YYYY-MM-DD'

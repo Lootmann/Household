@@ -3,14 +3,15 @@ import React from "react";
 
 import { BASE_API_URL } from "../util";
 
-function History() {
+function History({ year, month }: { year: number; month: number }) {
   const [histories, setHistories] = React.useState<HouseholdType[]>([]);
 
   React.useEffect(() => {
-    // TODO: change api for pagination
-    axios.get(BASE_API_URL + "/households").then((resp) => {
-      setHistories(resp.data);
-    });
+    axios
+      .get(BASE_API_URL + `/households?year=${year}&month=${month}`)
+      .then((resp) => {
+        setHistories(resp.data);
+      });
   }, []);
 
   return (
@@ -37,11 +38,6 @@ function History() {
             ))}
           </tbody>
         </table>
-
-        {/* TODO: pagination */}
-        <div className="flex flex-col items-center">
-          <p>&lt;First &lt; Prev [Pagination] Next &gt; Last &gt;</p>
-        </div>
       </div>
 
       <div className="flex-1 p-2 text-2xl border-2 border-slate-400 rounded-md">
