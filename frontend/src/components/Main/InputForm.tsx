@@ -19,7 +19,6 @@ function InputForm({ handleRefresh }: any) {
       setCategories(categories_from_api);
 
       const [year, month, day] = getCurrentDate();
-      console.log(year, month, day);
 
       // set initial value to HouseholdForm
       setHouseholdForm({
