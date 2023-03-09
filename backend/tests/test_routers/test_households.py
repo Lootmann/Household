@@ -35,6 +35,42 @@ class TestGetAllHouseholds:
         assert resp.status_code == status.HTTP_200_OK
         assert len(resp.json()) == 10
 
+    def test_get_all_households_order_by_registered_at(self, client):
+        category = CategoryFactory.create_category(client, name=random_string())
+
+        HouseholdFactory.create_household(
+            client,
+            category_id=category.id,
+            registered_at=date(year=2023, month=1, day=1),
+        )
+
+        HouseholdFactory.create_household(
+            client,
+            category_id=category.id,
+            registered_at=date(year=2021, month=1, day=1),
+        )
+
+        HouseholdFactory.create_household(
+            client,
+            category_id=category.id,
+            registered_at=date(year=2022, month=1, day=1),
+        )
+
+        HouseholdFactory.create_household(
+            client,
+            category_id=category.id,
+            registered_at=date(year=2023, month=1, day=2),
+        )
+
+        resp = client.get("/households")
+        assert resp.status_code == status.HTTP_200_OK
+
+        resp_obj = resp.json()
+        assert resp_obj[0]["registered_at"] == "2023-01-02"
+        assert resp_obj[1]["registered_at"] == "2023-01-01"
+        assert resp_obj[2]["registered_at"] == "2022-01-01"
+        assert resp_obj[3]["registered_at"] == "2021-01-01"
+
 
 class TestGetHousehold:
     def test_get_household(self, client):

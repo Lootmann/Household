@@ -1,6 +1,6 @@
 from typing import List
 
-from sqlalchemy import extract
+from sqlalchemy import asc, desc, extract
 from sqlalchemy.orm import Session
 
 from api.models.households import Household as HouseholdModel
@@ -9,7 +9,12 @@ from api.schemas import households as household_schema
 
 def get_all_households(db: Session) -> List[HouseholdModel]:
     # return db.execute(select(HouseholdModel)).scalars().all()
-    return db.query(HouseholdModel).all()
+    return (
+        db.query(HouseholdModel)
+        .order_by(desc(HouseholdModel.registered_at))
+        .order_by(asc(HouseholdModel.category_id))
+        .all()
+    )
 
 
 def find_households_by_date(db: Session, year: int, month: int) -> List[HouseholdModel]:
