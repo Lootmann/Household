@@ -3,7 +3,7 @@ import React from "react";
 
 import { BASE_API_URL, getToday } from "../util";
 
-function InputForm() {
+function InputForm({ handleRefresh }: any) {
   const [categories, setCategories] = React.useState<CategoryType[]>([]);
   const [householdForm, setHouseholdForm] = React.useState<HouseholdFormType>({
     amount: 0,
@@ -49,6 +49,9 @@ function InputForm() {
       memo: "",
       category_id: categories[0].id,
     });
+
+    // for refresh Chart
+    handleRefresh();
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {

@@ -1,10 +1,12 @@
 import React from "react";
+import axios from "axios";
 
 import { ResponsiveBar } from "@nivo/bar";
 
 import { createDay, createMonth, createWeek } from "./converter";
+import { BASE_API_URL, getCurrentDate } from "../util";
 
-function Aggregate({ households, categories }: AggregateProp) {
+function Aggregate({ refresh }: any) {
   // 'data' is used for ResponsiveBar.
   // FIXME: set TypeHint
   const [data, setData] = React.useState<any>([]);
@@ -30,10 +32,27 @@ function Aggregate({ households, categories }: AggregateProp) {
     return categories.map((category) => category.name);
   }
 
+  /**
+   * async function fetchData
+   *
+   * get Households and Categories from API Server
+   * and convert Nivo Chart data
+   */
+  async function fetchData() {
+    const [year, month] = getCurrentDate();
+    const respHouseholds = await axios.get(
+      BASE_API_URL + `/households?year=${year}&month=${month}`
+    );
+    const respCategories = await axios.get(BASE_API_URL + "/categories");
+
+    setData(createChartData(respHouseholds.data, respCategories.data));
+    setKeys(createChartKeys(respCategories.data));
+  }
+
   React.useEffect(() => {
-    setData(createChartData(households, categories));
-    setKeys(createChartKeys(categories));
-  }, []);
+    const init = () => async () => await fetchData();
+    init();
+  }, [refresh]);
 
   return (
     <>
@@ -48,7 +67,7 @@ function Aggregate({ households, categories }: AggregateProp) {
           </a>
         </h2>
 
-        {data.length > 0 && keys.length > 0 && (
+        {data && keys && (
           <ResponsiveBar
             data={data}
             keys={keys}
