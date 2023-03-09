@@ -12,6 +12,27 @@ export function getCurrentDate(): [number, number, number] {
 }
 
 /**
+ * check this day is current week.
+ *
+ * ...          5  6  7
+ * [8  9 10 11 12 13 14]
+ * 15 16 ...
+ *
+ * @param {number} year
+ * @param {number} month
+ * @param {number} day
+ * @return {boolean}
+ */
+export function isSameWeek(year: number, month: number, day: number): boolean {
+  const checkDay = new Date(`${year}-${month}-${day}`);
+  const today = new Date();
+  const diffTime = Math.abs(today.getTime() - checkDay.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  const diffWeeks = Math.floor(diffDays / 7);
+  return diffWeeks === 0 && checkDay.getDay() <= today.getDay();
+}
+
+/**
  * dateToFormattedString
  *
  * @param {number} year
@@ -38,6 +59,10 @@ export function dateToFormattedString(
 /**
  * get date (Date()) from date string
  * date string format is 'YYYY-MM-DD'
+ *
+ * NOTE: e.g. dateString is 2022-11-12
+ * new Date(dateString).getMonth() is 10!
+ * So, I need +1 to date.getMonth()
  *
  * @param {string} dateString
  * @returns {number, number, number} [year, month, day]

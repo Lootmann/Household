@@ -20,11 +20,8 @@ function Aggregate({ refresh }: any) {
   ) {
     const res: any = [];
     res.push(createDay(households, categories));
-    // res.push(createWeek(converted));
+    res.push(createWeek(households, categories));
     res.push(createMonth(households, categories));
-
-    console.log(res);
-
     return res;
   }
 
