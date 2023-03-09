@@ -50,7 +50,7 @@ function Aggregate({ refresh }: any) {
   }
 
   React.useEffect(() => {
-    const init = () => async () => await fetchData();
+    const init = async () => await fetchData();
     init();
   }, [refresh]);
 
