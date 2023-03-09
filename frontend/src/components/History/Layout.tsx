@@ -3,6 +3,7 @@ import React from "react";
 import { Link, LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import { BASE_API_URL, calcDate } from "../util";
 import EditFormModal from "./EditFormModal";
+import Pagination from "./Pagination";
 
 // LoaderFunctionArgs for type hint on main.tsx loader
 export function loader({ params }: LoaderFunctionArgs) {
@@ -13,22 +14,15 @@ function History() {
   const [histories, setHistories] = React.useState<HouseholdType[]>([]);
   const params = useLoaderData() as HistoryLoaderType;
 
-  // FIXME: refactor - this date calc is freaking disgusting :^(
-  const [nextMonth, setNextMonth] = React.useState<HistoryLoaderType>({
-    year: 0,
-    month: 0,
-  });
-
-  const [prevMonth, setPrevMonth] = React.useState<HistoryLoaderType>({
-    year: 0,
-    month: 0,
-  });
-
   // TODO: modal
   const [open, setOpen] = React.useState<boolean>(false);
   function handleClose() {
     setOpen(false);
   }
+
+  // for pagination
+  const [year, setYear] = React.useState<number>(0);
+  const [month, setMonth] = React.useState<number>(0);
 
   React.useEffect(() => {
     axios
@@ -40,36 +34,15 @@ function History() {
         setHistories(resp.data);
       });
 
-    // calc history date for pagination
-    const [nextYear, nextMonth] = calcDate(params.year, params.month, +1);
-    setNextMonth({ year: nextYear, month: nextMonth });
-
-    const [prevYear, prevMonth] = calcDate(params.year, params.month, -1);
-    setPrevMonth({ year: prevYear, month: prevMonth });
+    // for pagination
+    setYear(params.year);
+    setMonth(params.month);
   }, [params.year, params.month]);
 
   return (
     <div className="h-full gap-2 flex">
       <div className="h-full flex flex-col gap-2 flex-1 p-2 border-2 border-slate-400 bg-slate-400 rounded-md">
-        <div className="flex items-center justify-center gap-4 text-2xl">
-          <Link
-            to={`/histories/${prevMonth.year}/${prevMonth.month}`}
-            className="px-2 hover:bg-yellow-500"
-          >
-            &lt;{prevMonth.month}月
-          </Link>
-
-          <p className="font-bold">
-            {params.year}年 {params.month}月
-          </p>
-
-          <Link
-            to={`/histories/${nextMonth.year}/${nextMonth.month}`}
-            className="px-2 hover:bg-yellow-500"
-          >
-            {nextMonth.month}月 &gt;
-          </Link>
-        </div>
+        <Pagination year={year} month={month} />
 
         {histories.length > 0 ? (
           // FIXME: full-width table
