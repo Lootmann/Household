@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react";
 
-import { BASE_API_URL, getToday } from "../util";
+import { BASE_API_URL, dateToFormattedString, getCurrentDate } from "../util";
 
 function InputForm({ handleRefresh }: any) {
   const [categories, setCategories] = React.useState<CategoryType[]>([]);
@@ -18,10 +18,13 @@ function InputForm({ handleRefresh }: any) {
       const categories_from_api = resp.data;
       setCategories(categories_from_api);
 
+      const [year, month, day] = getCurrentDate();
+      console.log(year, month, day);
+
       // set initial value to HouseholdForm
       setHouseholdForm({
         ...householdForm,
-        registered_at: getToday(),
+        registered_at: dateToFormattedString(year, month, day),
         category_id: categories_from_api[0].id,
       });
     });
@@ -42,10 +45,12 @@ function InputForm({ handleRefresh }: any) {
         console.log(resp.data);
       });
 
+    const [year, month, day] = getCurrentDate();
+
     // clear form
     setHouseholdForm({
       amount: 0,
-      registered_at: getToday(),
+      registered_at: dateToFormattedString(year, month, day),
       memo: "",
       category_id: categories[0].id,
     });

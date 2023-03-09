@@ -1,39 +1,38 @@
 export const BASE_API_URL = "http://localhost:8888";
 
 /**
- * get current today 'Date'
- * date format is 'yyyy-MM-DD' and e.g getMonth() returns 0, 1, ..., 12
- * so I need getMonth(), and getDay() requires 0 padding when number is One digit.
- *
- * @params
- * @return {string}: yyyy-MM-DD
- */
-export function getToday(): string {
-  const date = new Date();
-  const [year, month, day] = [
-    date.getFullYear(),
-    (date.getMonth() + 1).toString().padStart(2, "0"),
-    date.getDate().toString().padStart(2, "0"),
-  ];
-  return `${year}-${month}-${day}`;
-}
-
-/**
  * get current date
+ * date.getMonth() is starting at 0, so need +1
  *
- * @returns {[number, number, number]} year, month day
+ * @return {[number, number, number]} year, month day
  */
 export function getCurrentDate(): [number, number, number] {
   const date = new Date();
-  return [date.getFullYear(), date.getMonth() + 1, date.getDay()];
+  return [date.getFullYear(), date.getMonth() + 1, date.getDate()];
 }
 
-export function getYear(): number {
-  return new Date().getFullYear();
-}
-
-export function getMonth(): number {
-  return new Date().getMonth() + 1;
+/**
+ * dateToFormattedString
+ *
+ * @param {number} year
+ * @param {number} month
+ * @param {number} day
+ * @param {string} sep
+ * @return {string} YYYY-MM-DD
+ */
+export function dateToFormattedString(
+  year: number,
+  month: number,
+  day: number,
+  sep: string = "-"
+): string {
+  return (
+    `${year}` +
+    `${sep}` +
+    `${String(month).padStart(2, "0")}` +
+    `${sep}` +
+    `${String(day).padStart(2, "0")}`
+  );
 }
 
 /**
@@ -47,7 +46,7 @@ export function getDateFromDateString(
   dateString: string
 ): [number, number, number] {
   const date = new Date(dateString);
-  return [date.getFullYear(), date.getMonth() + 1, date.getDay()];
+  return [date.getFullYear(), date.getMonth() + 1, date.getDate()];
 }
 
 // FIXME: ambigouous name
