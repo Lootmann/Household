@@ -21,6 +21,11 @@ function History() {
     setHouseholdId(household_id);
   }
 
+  const [refresh, setRefresh] = React.useState<boolean>(false);
+  function handleRefresh() {
+    setRefresh(!refresh);
+  }
+
   // for pagination
   const [year, setYear] = React.useState<number>(0);
   const [month, setMonth] = React.useState<number>(0);
@@ -38,7 +43,7 @@ function History() {
     // for pagination
     setYear(params.year);
     setMonth(params.month);
-  }, [params.year, params.month]);
+  }, [params.year, params.month, refresh]);
 
   return (
     <div className="h-full gap-2 flex">
@@ -106,6 +111,7 @@ function History() {
         isModalOpen={modalOpen}
         handleModal={() => handleModal(false, householdId)}
         household_id={householdId}
+        handleRefresh={handleRefresh}
       />
 
       <div className="flex-1 p-2 text-2xl border-2 border-slate-400 rounded-md">

@@ -6,6 +6,7 @@ type EditFormModalProps = {
   isModalOpen: boolean;
   handleModal: any;
   household_id: number;
+  handleRefresh: any;
 };
 
 // FIXME: COMPLICATED !!!
@@ -17,6 +18,7 @@ function EditFormModal({
   isModalOpen,
   handleModal,
   household_id,
+  handleRefresh,
 }: EditFormModalProps) {
   const [categories, setCategories] = React.useState<CategoryType[]>([]);
 
@@ -28,9 +30,24 @@ function EditFormModal({
     category: { id: 0, name: "" },
   });
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleUpdateSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     console.log(householdForm);
+
+    axios
+      .post(BASE_API_URL + "/households", {
+        amount: householdForm.amount,
+        registered_at: householdForm.registered_at,
+        memo: householdForm.memo,
+        category_id: householdForm.category.id,
+      })
+      .then((resp) => {
+        console.log(resp);
+        console.log(resp.data);
+      });
+
+    handleModal(false);
+    handleRefresh();
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -81,7 +98,7 @@ function EditFormModal({
 
             <form
               method="post"
-              onSubmit={(e) => handleSubmit(e)}
+              onSubmit={(e) => handleUpdateSubmit(e)}
               className="flex flex-col gap-2 ml-auto mr-auto"
             >
               <input
