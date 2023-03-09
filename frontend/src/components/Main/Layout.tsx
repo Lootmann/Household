@@ -23,11 +23,15 @@ function Main() {
         </div>
       </div>
 
-      <div className="h-1/2 flex-grow border-2 border-slate-300 bg-black p-4">
-        <p className="text-xl text-slate-400">
+      <div className="h-1/2 flex-grow flex border-2 border-slate-300 bg-black p-4">
+        <img
+          src="../../assets/bitdance.gif"
+          alt="Mc.Komiya"
+          className="flex-1 max-w-md"
+        />
+        <p className="flex-1 text-xl text-slate-400">
           <b>Detailed Analysis</b> - 何を表示しようかな
         </p>
-        <img src="../../assets/bitdance.gif" alt="" />
       </div>
     </div>
   );
