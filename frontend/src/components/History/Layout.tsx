@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react";
-import { Link, LoaderFunctionArgs, useLoaderData } from "react-router-dom";
-import { BASE_API_URL, calcDate } from "../util";
+import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import { BASE_API_URL } from "../util";
 import EditFormModal from "./EditFormModal";
 import Pagination from "./Pagination";
 
@@ -14,10 +14,11 @@ function History() {
   const [histories, setHistories] = React.useState<HouseholdType[]>([]);
   const params = useLoaderData() as HistoryLoaderType;
 
-  // TODO: modal
-  const [open, setOpen] = React.useState<boolean>(false);
-  function handleClose() {
-    setOpen(false);
+  const [householdId, setHouseholdId] = React.useState<number>(0);
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  function handleModal(isOpen: boolean, household_id: number) {
+    setModalOpen(isOpen);
+    setHouseholdId(household_id);
   }
 
   // for pagination
@@ -71,9 +72,10 @@ function History() {
             <tbody>
               {histories.map((history) => (
                 <tr key={history.id} className="hover:bg-slate-200">
-                  {/* TODO: add model to edit each histories */}
                   <td className="px-2 text-center border-b border-slate-400">
-                    <button onClick={() => setOpen(() => !open)}>✏️</button>
+                    <button onClick={() => handleModal(true, history.id)}>
+                      ✏️
+                    </button>
                   </td>
                   <td className="px-4 border-b border-slate-400">
                     {history.registered_at}
@@ -100,7 +102,11 @@ function History() {
         )}
       </div>
 
-      <EditFormModal isOpen={open} handleClose={() => handleClose} />
+      <EditFormModal
+        isModalOpen={modalOpen}
+        handleModal={() => handleModal(false, householdId)}
+        household_id={householdId}
+      />
 
       <div className="flex-1 p-2 text-2xl border-2 border-slate-400 rounded-md">
         <h2>Left Something</h2>
