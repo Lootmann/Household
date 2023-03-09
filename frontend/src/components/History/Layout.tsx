@@ -12,6 +12,7 @@ function History() {
   const [histories, setHistories] = React.useState<HouseholdType[]>([]);
   const params = useLoaderData() as HistoryLoaderType;
 
+  // FIXME: refactor - this date calc is freaking disgusting :^(
   const [nextMonth, setNextMonth] = React.useState<HistoryLoaderType>({
     year: 0,
     month: 0,
