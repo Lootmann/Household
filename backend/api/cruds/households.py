@@ -24,9 +24,18 @@ def find_households_by_date(db: Session, year: int, month: int) -> List[Househol
     )
 
     if month is None:
-        return stmt.all()
+        return (
+            stmt.order_by(desc(HouseholdModel.registered_at))
+            .order_by(asc(HouseholdModel.category_id))
+            .all()
+        )
 
-    return stmt.where(extract("month", HouseholdModel.registered_at) == month).all()
+    return (
+        stmt.where(extract("month", HouseholdModel.registered_at) == month)
+        .order_by(desc(HouseholdModel.registered_at))
+        .order_by(asc(HouseholdModel.category_id))
+        .all()
+    )
 
 
 def find_by_id(db: Session, household_id: int) -> HouseholdModel | None:
