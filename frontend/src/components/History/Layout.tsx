@@ -64,23 +64,48 @@ function History() {
         </div>
 
         {histories.length > 0 ? (
-          <table className="block overflow-y-scroll table-fixed w-full bg-slate-300 border-separate rounded-md">
-            <thead>
+          // FIXME: full-width table
+          <table className="block overflow-y-scroll table-auto bg-slate-300 border-collapse rounded-md">
+            {/* TODO: table thead should be fixed at top */}
+            <thead className="text-2xl">
               <tr>
-                <th className="text-left px-4">Registered</th>
-                <th className="text-left px-2">Amout</th>
-                <th className="text-left px-2">Category</th>
-                <th className="text-left px-2">Memo</th>
+                <th className="text-center px-2 border-b border-slate-600">
+                  Edit
+                </th>
+                <th className="text-left px-4 border-b border-slate-600">
+                  Registered
+                </th>
+                <th className="text-left px-4 border-b border-slate-600">
+                  Amout
+                </th>
+                <th className="text-left px-4 border-b border-slate-600">
+                  Category
+                </th>
+                <th className="text-left px-4 border-b border-slate-600">
+                  Memo
+                </th>
               </tr>
             </thead>
 
             <tbody>
               {histories.map((history) => (
-                <tr key={history.id}>
-                  <td className="px-4 ">{history.registered_at}</td>
-                  <td className="px-2">{history.amount}</td>
-                  <td className="px-2">{history.category.name}</td>
-                  <td className="px-2">{history.memo}</td>
+                <tr key={history.id} className="hover:bg-slate-200">
+                  {/* TODO: add model to edit each histories */}
+                  <td className="px-2 text-center border-b border-slate-400">
+                    ✏️
+                  </td>
+                  <td className="px-4 border-b border-slate-400">
+                    {history.registered_at}
+                  </td>
+                  <td className="px-4 text-right border-b border-slate-400">
+                    {history.amount}
+                  </td>
+                  <td className="px-4 border-b border-slate-400">
+                    {history.category.name}
+                  </td>
+                  <td className="px-4 border-b border-slate-400">
+                    {history.memo}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -94,6 +119,7 @@ function History() {
         )}
       </div>
 
+      {/* TODO: create model HERE :^) */}
       <div className="flex-1 p-2 text-2xl border-2 border-slate-400 rounded-md">
         <h2>Left Something</h2>
       </div>
