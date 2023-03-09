@@ -2,6 +2,7 @@ import axios from "axios";
 import React from "react";
 import { Link, LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import { BASE_API_URL, calcDate } from "../util";
+import EditFormModal from "./EditFormModal";
 
 // LoaderFunctionArgs for type hint on main.tsx loader
 export function loader({ params }: LoaderFunctionArgs) {
@@ -22,6 +23,12 @@ function History() {
     year: 0,
     month: 0,
   });
+
+  // TODO: modal
+  const [open, setOpen] = React.useState<boolean>(false);
+  function handleClose() {
+    setOpen(false);
+  }
 
   React.useEffect(() => {
     axios
@@ -93,7 +100,7 @@ function History() {
                 <tr key={history.id} className="hover:bg-slate-200">
                   {/* TODO: add model to edit each histories */}
                   <td className="px-2 text-center border-b border-slate-400">
-                    ✏️
+                    <button onClick={() => setOpen(() => !open)}>✏️</button>
                   </td>
                   <td className="px-4 border-b border-slate-400">
                     {history.registered_at}
@@ -120,7 +127,8 @@ function History() {
         )}
       </div>
 
-      {/* TODO: create model HERE :^) */}
+      <EditFormModal isOpen={open} handleClose={() => handleClose} />
+
       <div className="flex-1 p-2 text-2xl border-2 border-slate-400 rounded-md">
         <h2>Left Something</h2>
       </div>
