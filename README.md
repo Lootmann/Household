@@ -27,6 +27,7 @@ PATCH /households/{household_id}
 - backend
   - [x] `/households/search?year=<int>&month=<int>&day=<int>`]
   - [ ] `/households?limit=<int>&offset=<int>` for page nation
+  - [ ] `/households` order by registered_at
 
 
 ## Examples
