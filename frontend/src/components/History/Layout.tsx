@@ -14,13 +14,22 @@ function History() {
   const [histories, setHistories] = React.useState<HouseholdType[]>([]);
   const params = useLoaderData() as HistoryLoaderType;
 
+  // pass household_id to Modal
   const [householdId, setHouseholdId] = React.useState<number>(0);
+
+  // control model open/close state
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+
+  // FIXME: handleModal needs isOpen(Modal open/close state, and household_id)
+  // FIXME: It's soooo ugly, this function needs this household_id argumen 😠
   function handleModal(isOpen: boolean, household_id: number) {
     setModalOpen(isOpen);
     setHouseholdId(household_id);
   }
 
+  // refresh:
+  //    when a household updated, or delete
+  //    reload current histories page
   const [refresh, setRefresh] = React.useState<boolean>(false);
   function handleRefresh() {
     setRefresh(!refresh);

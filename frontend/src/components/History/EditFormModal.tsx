@@ -3,13 +3,16 @@ import { BASE_API_URL } from "../util";
 import axios from "axios";
 
 type EditFormModalProps = {
+  // when ModalOpen is true, show modal
   isModalOpen: boolean;
+  // control whether the Modal is open or closed
   handleModal: any;
   household_id: number;
+  // when a household updated or delete, reload Parent Layout.tsx component
   handleRefresh: any;
 };
 
-// FIXME: COMPLICATED !!!
+// FIXME: COMPLICATED 😠 !!!
 /**
  * EditFormModal
  * EditForm can do update and delete a household.
@@ -32,7 +35,6 @@ function EditFormModal({
 
   function handleUpdateSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log(householdForm);
 
     axios
       .post(BASE_API_URL + "/households", {
@@ -45,6 +47,20 @@ function EditFormModal({
         console.log(resp);
         console.log(resp.data);
       });
+
+    // remove modal
+    handleModal(false);
+    // realod current history
+    handleRefresh();
+  }
+
+  function handleDeleteSubmit(
+    e: React.MouseEvent<HTMLInputElement, MouseEvent>
+  ) {
+    e.preventDefault();
+    axios.delete(BASE_API_URL + `/households/${household_id}`).then((resp) => {
+      console.log(resp);
+    });
 
     handleModal(false);
     handleRefresh();
@@ -153,15 +169,18 @@ function EditFormModal({
               </select>
 
               <div className="flex justify-evenly gap-4">
+                {/* NOTE: Delete FormButton */}
                 <input
                   type="submit"
                   value="Delete"
-                  className="bg-red-500 px-2 border-2 border-slate-500 rounded-md"
+                  className="bg-red-500 hover:bg-red-300 px-2 border-2 border-slate-500 rounded-md"
+                  onClick={(e) => handleDeleteSubmit(e)}
                 />
+                {/* NOTE: Update FormButton */}
                 <input
                   type="submit"
                   value="Update :^)"
-                  className="flex-1 bg-yellow-500 text-slate-900 px-2 py-1 border-2 border-slate-500 rounded-md"
+                  className="flex-1 bg-yellow-500 hover:yellow-300 text-slate-900 px-2 py-1 border-2 border-slate-500 rounded-md"
                 />
               </div>
             </form>
